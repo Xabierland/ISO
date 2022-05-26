@@ -1,0 +1,8 @@
+examen: examen.o area.o aritmetica.o
+    gcc examen.o area.o aritmetica.o -o examen
+area.o: area.c
+    gcc -o area.o -c area.c -I../include
+aritmetica.o: aritmetica.c
+    gcc -o aritmetica.o -c aritmetica.c -I../include 
+examen.o: examen.c
+    gcc -o examen.o -c examen.c -I../include

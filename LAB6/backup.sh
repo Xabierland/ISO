@@ -1,0 +1,1 @@
+tar cvzf /tmp/home_xabierland.tar.gz /home/xabierland

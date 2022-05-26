@@ -1,0 +1,50 @@
+#include <stdio.h>
+
+int main()
+{
+	char dir[255];	//DIRECCION DEL ARCHIVO
+	printf("Introduce la direccion del fichero:\t");
+	scanf("%s",dir);
+
+	FILE * fp = fopen(dir,"w");
+	char c;
+	c='a';
+	
+	while(c<='z')
+	{
+		fputc(c,fp);
+		c++;
+		printf("%c",c);
+	}
+	fputc('\n',fp);
+	c='A';
+	while(c<='Z');
+	{
+		fputc(c,fp);
+		c++;
+	}
+	fclose(fp);
+	return 0;
+}
+#include <stdio.h>
+
+int main()
+{
+	char dir[255];
+	char c;
+	printf("\nIntroduce la direccion del fichero\n");
+	scanf("%s",dir);
+	FILE * fp = fopen(dir,"r");
+	int i=0;
+	while(1)
+	{
+		c=fgetc(fp);
+		if(feof(fp))
+			break;
+		i++;
+	}
+	printf("El numero de Bytes es: %i\n", i);
+
+	//END
+	return 0;
+}

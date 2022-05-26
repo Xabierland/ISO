@@ -1,0 +1,124 @@
+﻿Introducción: Sistema de ficheros y gestión de aplicaciones        /
+1. Sistema de ficheros y gestión de aplicaciones II
+   1. Sabe utilizar redireccionamiento y tuberías:
+Nota: utilizando una única línea de comandos
+a)Averigua cuántos ficheros hay en tu directorio de trabajo (man wc).
+	ls | wc -l
+b)Guardar la fecha en el fichero “conectados.txt” (man date)
+	date > conectados.txt
+c)Añade al fichero “conectados.txt” los usuarios conectados a la máquina.(man who)
+	who >> conectados.txt
+d)Busca el fichero fstab en toda la partición de linux y redirecciona los errores al fichero “errores.txt” (man find)
+	find / -name "fstab" 2> errores.txt	
+e)Crea un fichero “animales.txt” que contenga: 
+perro 
+gato
+vaca
+toro
+cerdo
+Crea un fichero que se llame “animalesordenados.txt” que contendrá todos los animales de “animales.txt”  ordenados alfabéticamente usando el comando “sort” (man sort)
+	sort animales.txt > animalesordenados.txt		
+f)Redirecciona el error estándar a un archivo err.txt del siguiente comando: cat /ceq11
+	cat /ceq11 2> err.txt
+g)Redirecciona tanto la salida estándar como error estándar del siguiente comando “cat /etc/fstab” al fichero “salidaerror.txt” simultáneamente.
+	cat /etc/fstab &> salidaerror.txt
+h)Muestra la cantidad de archivos y directorios que hay en el directorio / usando el comando “wc” y “ls”.
+	ls -a | wc -l
+i)Dado un archivo con nombres de personas pers.txt ---un nombre en cada línea---, escriba un comando para bash que ordene los nombres y presente sólo los 10 primeros (usa sort y head)
+	sort pers.txt | head -n+10
+j)Dada una lista de palabras en un archivo palabras.txt ---una en cada línea---, escriba un comando para bash que presente la cantidad de palabras no repetidas. (usa sort y wc)
+	sort -u palabras.txt | wc -I
+k) Cuenta el número de líneas que tiene el fichero “animalesordenados.txt” utilizando redireccionamiento de entrada.
+	less animalesordenados.txt | wc -l
+=======================================================================================
+   2. Sabe configurar el montaje de dispositivos
+a) Observa la ayuda del mount 
+	man mount
+
+b) Guarda el fichero de configuración "/etc/fstab" como "/etc/fstabbackup":
+	sudo cp /etc/fstab /etc/fstabbackup
+
+c)Busca una partición del tipo FAT32 con el comando "sudo blkid" y montala en la carpeta "/media/datos" (primeramente crea la carpeta con: sudo mkdir /media/datos), con las siguientes opciones: defaults, utf8, dmask=027, fmask=137, uid=1000, gid=1000?(Explica cada una de las opciones ). Añade la opción de que se chequee si hay errores a la vez que la partición "/".
+	sudo blkid
+
+d)Comprueba que el montaje se realiza de forma correcta después de ejecutar "sudo mount -a"
+	sudo mount -a
+
+e)Edita el fichero “fstab” para montar la partición ntfs de windows en la carpeta  “/media/windows” desde el arranque de linux. Se pide usar el driver “ntfs-3g” y usar las siguientes opciones de montaje: defaults, uid=1000, gid=1000, dmask=027, fmask=137.
+	sudo blkid
+	mount -a
+
+f) Lo normal es que cuando conectamos un disco usb externo, se auto monte correctamente, pero en caso de que no se auto monte, para montarlo manualmente podemos realizar los siguientes pasos:
+	* Crea una carpeta, por ejemplo: sudo mkdir /media/usb 
+	* Observa el dispositivo físico con el cual ha sido asignado: sudo fdisk -l . Por ejemplo /dev/sdb1 
+	* Para montar de manera manual un sistema de ficheros FAT16 o FAT32: 
+	sudo mount -t vfat /dev/sdb1 /media/usb -o uid=1000,gid=100,utf8,dmask=027,fmask=137 
+	* ¿Cómo sería si el dispositivo usb ha sido formateado como un sistema de ficheros NTFS?
+	* Finalmente podemos desmontarlo: sudo umount /media/usb 
+	sudo mdkir /media/usb
+	sudo fsdisk
+	sudo mount -t vfat /dev/sdb1 /media/usb
+	sudo umount /media/usb
+g)Monta el lápiz usb sabiendo que, no puedes modificar el fichero fstab. Y el montaje debe cumplir las siguientes características: que el lápiz usa el sistema de ficheros fat32, que el kernel ha detectado el dispositivo como /dev/sdb1(dmesg o sudo fdisk -l ) y que se monte en la carpeta /media/lapiz.
+	sudo mkdir /media/pendrive
+	sudo mount -t vfat -o defaults /dev/sdb1 /media/pendrive
+	sduo umount /media/pendrive
+
+====================================================================================================================================
+   3. Sabe gestionar los paquetes comprimidos
+a) Crea una carpeta “prueba” en tu carpeta personal e  introduce en el varios archivos. Crea una copia del contenido  de la carpeta “prueba” en un fichero cuyo nombre será “copiaprueba.tar.gz” que se guardará en tu carpeta personal.
+	cd ~
+	tar -cvf copiaprueba.tar.gz prueba/*
+b) Elimina el contenido de la carpeta “prueba”
+	rm -r prueba/*
+c) Recupera el contenido de la carpeta “prueba” utilizando el fichero “copiaprueba.tar.gz”.
+	cd ~
+	tar -xvf copiaprueba.tar.gz
+d) Vuelve a repetir los pasos de a,b y c, pero esta vez utilizando la extensión tar.bz2.
+	tar -cvf copiaprueba.tar prueba/*
+	bzip2 copiaprueba.tar
+	rm -r prueba/*
+	bunzip2 copiaprueba.tar.bz2
+	tar -xvf copiaprueba.tar
+====================================================================================================================================
+   4. Sabe gestionar e instalar las aplicaciones
+      1. apt-get
+a) Actualiza y baja la lista de las aplicaciones que hay en los repositorios
+	apt update
+b) Lista todos los paquetes que tienes instalados en tu Ubuntu
+	apt list
+c) Desinstala la aplicación “vim-tiny”
+	sudo apt remove vim-tiny
+d) Instala la aplicación “vim”
+	sudo apt install vim
+e) Instala aptitude.
+	sudo apt install aptitude
+f) Actualiza todo el sistema (no instales paquetes nuevos)
+	sudo apt update && apt upgrade
+
+      2. aptitude
+a) Actualiza todo el sistema (no instales paquetes nuevos): 
+	sudo aptitude update && aptitude safe-upgrade
+b) Instala la aplicación “grub-customizer“ para cambiar el orden por defecto del menu del grub para que en vez de arrancar linux por defecto arranque windows (más información en https://ubuntuhandbook.org/index.php/2020/04/default-os-entry-ubuntu-20-04-dual-boot/)
+	sudo aptitude install grub-customizer
+c) Busca la aplicación o paquete “grub-customizer"
+	aptitude search grub-customizer
+d) Limpia los ficheros .deb que han sido bajados para su instalación
+	sudo aptitude clean
+
+      3. dpkg
+a) Consulta si está instalado el paquete o aplicación “grub-customizer"
+	dpkg -l | grep "grub-customizer"
+b) Lista los ficheros que se instalan con el paquete "grub-customizer"
+	dpkg -L grub-customizer
+=============================================================================================
+Para más información lee: https://help.ubuntu.com/community/AptGet/Howto
+y
+https://linuxhint.com/apt_package_manager_ubuntu/
+
+
+y
+https://juncotic.com/apt-vs-apt-get-vs-aptitude-algunas-notas/
+
+
+Lengoaia eta Sistema Informatikoak Saila
